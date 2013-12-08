@@ -8,24 +8,30 @@ public class IpDetector
 {
 	private InetAddress boardcastIpAddr;
 	private int port;
-	MulticastListener multicastListener;
-	MulticastSender multicastSender;
-	MulticastSocket socket;
-	ThreadSafeList<UserInfo> userInfoThreadSafeList = new ThreadSafeList<>(10);
-	HelloData helloData = new HelloData();
-	Thread listener;
-	Thread sender;
+	private MulticastListener multicastListener;
+	private MulticastSender multicastSender;
+	private MulticastSocket socket;
+	private ThreadSafeList<UserInfo> userInfoThreadSafeList = new ThreadSafeList<>(10);
 	
-	public IpDetector(InetAddress boardcastIpAddr, int port, String user) throws IOException, FormErrorException
+	private DetectorDataChanger detectorDataChanger;
+	private DetectorData detectordata;
+	
+	private Thread listener;
+	private Thread sender;
+	
+	public IpDetector(InetAddress boardcastIpAddr, int port, String user, short freeConnection) throws IOException, FormErrorException
 	{
 		this.boardcastIpAddr = boardcastIpAddr;
 		this.port = port;
 		socket = new MulticastSocket(port);
 		socket.joinGroup(boardcastIpAddr);
 		socket.setLoopbackMode(false);
-		helloData.setData(user);
-		this.multicastListener = new MulticastListener(socket, helloData, userInfoThreadSafeList);
-		this.multicastSender = new MulticastSender(socket, boardcastIpAddr, port, helloData);
+		
+		detectordata = new DetectorData(freeConnection, user);
+		detectorDataChanger = new DetectorDataChanger(detectordata);
+		
+		this.multicastListener = new MulticastListener(socket, detectorDataChanger, userInfoThreadSafeList);
+		this.multicastSender = new MulticastSender(socket, boardcastIpAddr, port, detectorDataChanger);
 	}
 	
 	public InetAddress getBoardcastIpAddr()
@@ -63,5 +69,25 @@ public class IpDetector
 	public int getSenderSleepTime()
 	{
 		return this.multicastSender.getSleepTime();
+	}
+	
+	public short getFreeConnection()
+	{
+		return this.detectordata.getFreeConnection();
+	}
+	
+	public void setFreeConnection(short freeConnection)
+	{
+		this.detectordata.setFreeConnection(freeConnection);
+	}
+	
+	public final void addOneFreeConnection()
+	{
+		this.detectordata.addOneFreeConnection();
+	}
+	
+	public final void reduceOneFreeConnection()
+	{
+		this.detectordata.reduceOneFreeConnection();
 	}
 }

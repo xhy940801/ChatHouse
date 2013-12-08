@@ -27,7 +27,16 @@ public class MulticastSender implements Runnable
 	{
 		while(run)
 		{
-			byte[] buf = dataChunk.getSendByte();
+			byte[] buf;
+			try
+			{
+				buf = dataChunk.getSendByte();
+			} catch (FormErrorException e1)
+			{
+				e1.printStackTrace();
+				run = false;
+				break;
+			}
 			DatagramPacket packet = new DatagramPacket(buf, buf.length, this.boardcastIpAddr, this.port);
 			try
 			{

@@ -4,7 +4,7 @@ import java.net.InetAddress;
 
 public class UserInfo
 {
-	private String username;
+	private DataPacket dataPacket;
 	private InetAddress ipAddr;
 	private int port;
 	
@@ -13,21 +13,21 @@ public class UserInfo
 		
 	}
 	
-	public UserInfo(String username, InetAddress ipAddr, int port)
+	public UserInfo(DataPacket dataPacket, InetAddress ipAddr, int port)
 	{
-		this.username = username;
+		this.dataPacket = dataPacket;
 		this.ipAddr = ipAddr;
 		this.port = port;
 	}
 	
-	public String getUserName()
+	public DataPacket getDataPacket()
 	{
-		return username;
+		return dataPacket;
 	}
 	
-	public void setUserName(String username)
+	public void setDataPacket(DataPacket dataPacket)
 	{
-		this.username = username;
+		this.dataPacket = dataPacket;
 	}
 	
 	public InetAddress getIpAddr()
@@ -56,7 +56,7 @@ public class UserInfo
 			return true;
 		if(obj instanceof UserInfo)
 		{
-			return username.equals(((UserInfo) obj).getUserName()) &&
+			return dataPacket.equals(((UserInfo) obj).getDataPacket()) &&
 					ipAddr.equals(((UserInfo) obj).getIpAddr()) &&
 					port == ((UserInfo)obj).getPort();
 		}
@@ -66,7 +66,7 @@ public class UserInfo
 	
 	public String toString()
 	{
-		return "Username: " + username +"\r\n" +
+		return dataPacket + "\r\n" +
 				"Ip address: " + ipAddr + "\r\n" +
 				"Port: " + port;
 	}

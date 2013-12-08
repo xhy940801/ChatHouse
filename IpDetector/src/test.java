@@ -14,10 +14,6 @@ public class test
 {
 	static final byte[] ipAddr = {(byte) 229,(byte) 201,(byte) 137,5};
 	static final int port = 10490;
-	public test()
-	{
-		// TODO Auto-generated constructor stub
-	}
 
 	public static void main(String[] args) throws IOException, FormErrorException, InterruptedException
 	{
@@ -26,7 +22,7 @@ public class test
 		
 		BufferedReader read = new BufferedReader(new InputStreamReader(System.in));
 		String sign = read.readLine();
-		IpDetector ipDetector = new IpDetector(InetAddress.getByAddress(ipAddr), port, sign);
+		IpDetector ipDetector = new IpDetector(InetAddress.getByAddress(ipAddr), port, sign, (short)5);
 		ipDetector.setSenderSleepTime(1000);
 		ipDetector.startListen();
 		ipDetector.startSender();

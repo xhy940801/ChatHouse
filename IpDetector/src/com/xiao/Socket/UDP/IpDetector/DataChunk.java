@@ -5,6 +5,6 @@ import java.net.DatagramPacket;
 public interface DataChunk
 {
 	public Object getObject(DatagramPacket packet) throws FormErrorException;
-	public byte[] getSendByte();
+	public byte[] getSendByte() throws FormErrorException;
 	public byte[] getBlankBuf();
 }
